@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const dbFuncs = require('../db/db')
 
 
 
@@ -10,9 +11,17 @@ router.get('/login', (req, res) => {
 
 })
 
-router.post('/auth', (req, res) => {
+ router.post('/auth',async (req, res) => {
     const user = req.body
-    res.send(user)
+    console.log(user)
+    try{
+        let responce = await dbFuncs.logIn(user.username,user.password);
+        console.log(responces)
+    }catch{
+        console.log("Failed to find user")
+    }
+    
+    
     //<-------- autenticar usuario -------->
     console.log('authenticating...')
 })
