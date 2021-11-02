@@ -9,6 +9,7 @@ const dropDownComputadores = document.getElementById('dropDownComputadores');
 
 const subtitulo = document.getElementById('subtitulo');
 seleccionar.addEventListener('click', async (event) => {
+    
     event.preventDefault()
     if (aula.value != "" && hora.value != "") {
         console.log(aula.value)
@@ -35,12 +36,27 @@ seleccionar.addEventListener('click', async (event) => {
 })
 
 
-reservar.addEventListener('click', async (event) => {
-
-    ///ESTO LE DA LA INFO A LA TEXT CARD
+dropDownComputadores.addEventListener('change',async (event)=>{
+    event.preventDefault()
     const SPECS = await postData('/getSPECS', { id: dropDownComputadores.value })
 
     const textSpecs = document.getElementById('specs')
     textSpecs.innerHTML = SPECS.text
     subtitulo.innerHTML = "computador " + dropDownComputadores.value
+})
+
+reservar.addEventListener('click', async (event) => {
+    event.preventDefault()
+    const info = await postData('/reservar', {
+        id: dropDownComputadores.value,
+        aula: aula.value,
+        hora: hora.value
+
+    })
+
+})
+
+hora.addEventListener('change',async (event)=>{
+    event.preventDefault()
+    dropDownComputadores.innerHTML = '<option></option>'
 })

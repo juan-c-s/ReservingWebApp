@@ -6,6 +6,7 @@ const codigo = document.getElementById('codigoRegistro')
 const email = document.getElementById('emailRegistro')
 const botonRegistro = document.getElementById('botonRegistro')
 const ingreso = document.getElementById('botonIrIngreso')
+const nombre = document.getElementById('nombre');
 
 
 botonRegistro.addEventListener('click', async (event) => {
@@ -15,6 +16,7 @@ botonRegistro.addEventListener('click', async (event) => {
         codigo: codigo.value,
         password: password.value,
         confirmarPassword: confirmarPassword.value,
+        nombre : nombre.value
     })
     console.log(data)
 })
