@@ -7,6 +7,7 @@ const codigoAula = document.getElementById('codigoAula')
 const CPU = document.getElementById('tipoCPU')
 const GPU = document.getElementById('GPU')
 const RAM = document.getElementById('GBRAM')
+const idComputador = document.getElementById('idComputador')
 
 
 //aula
@@ -29,6 +30,7 @@ botoncrearcomputador.addEventListener('click', async (event) => {
         GPU: GPU.value,
         RAM: RAM.value,
         aula: codigoAula.value,
+        id : idComputador.value
     })
     console.log(respuesta)
     CPU.value = ""
@@ -58,8 +60,6 @@ crearAsistenteTecnico.addEventListener('click', async (event) => {
         correo: correoAsistente.value,
         celular: celularAsistente.value
     })
-    console.log(respuesta)
-
 
     nombreAsistente.value = ""
     asistente.value = ""

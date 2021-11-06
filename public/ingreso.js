@@ -1,3 +1,4 @@
+
 import postData from './requests.js'
 
 
@@ -7,8 +8,21 @@ const password = document.getElementById('loginPassword')
 const registro = document.getElementById('botonIrRegistro')
 loginButon.addEventListener('click', async (event) => {
     event.preventDefault();
-    const data = await postData('/auth', { username: username.value, password: password.value })
-    console.log(data)//información que viene del servidor
+    const data =  postData('/auth', { username: username.value, password: password.value })
+  
+    data.then(info => {
+        if(info == true){
+            location.href = "/admin"
+        }else if(info == false){
+            location.href = "/Main"
+        }else{
+            location.href = "/registro"
+        }
+    }).catch((err)=>{
+        console.log(err)
+    });
+
+   
     username.value = ""
     password.value = ""
 })

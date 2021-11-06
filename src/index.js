@@ -16,8 +16,7 @@ const solicitudMantenimiento = require('./Routers/SolicitudMantenimiento')
 const reserva = require('./Routers/Main')
 const buscarTecnico = require('./Routers/BuscarTecnico')
 const admin = require('./Routers/Admin')
-const tecnico = require('./Routers/Tecnico')
-//environmental variables
+//env variables
 
 require('dotenv').config();
 const port = process.env.PORT || 3000
@@ -42,7 +41,6 @@ app.use(solicitudMantenimiento)
 app.use(reserva)
 app.use(buscarTecnico)
 app.use(admin)
-app.use(tecnico)
 
 hbs.registerHelper('isdefined', function (value) {
     return value !== undefined;

@@ -44,6 +44,7 @@ router.post('/reservar', async (req, res) => {
     
     try{
         await dbFuncs.hacerReserva(usuarioID,reserva.id,reserva.hora)
+        res.send("")
     }catch{
         console.log("failed to create Reserva")
     }

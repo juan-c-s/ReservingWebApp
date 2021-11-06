@@ -22,17 +22,27 @@ connection.connect((err) => {
 
 
 
-
-function logIn(correo,pasword){
+function logIn(correo,pasword,res){
 
     connection.query(`
-    SELECT correo,contraseña
+    SELECT correo,contraseña,isAdmin
     from mydb.Usuario
     where correo = '${correo}'
     && contraseña = '${pasword}';`
     ,(err, rows) => {
-        if(err) throw err;
-        return rows;
+        if(err) return err;
+        let lenRows  = rows.length
+       
+        if(lenRows == 1){
+            if(rows[0].isAdmin == true){
+                 res.send(true)
+                 return;
+            }
+            res.send(false)
+        }else{
+            res.send(null)
+        }
+        return rows
     });
 
 }
@@ -267,6 +277,118 @@ function buscarTecnicoPorAula(codigoAula,res){
 
 }
 
+function addComputador(idComputador,tipoGPU,tipoCPU,GBRAM,aula_Codigo){
+
+    connection.query(`
+    select idComputador
+    from Computador
+    where idComputador = ${idComputador};`
+    ,(err, rows) => {
+        if(err) return err;
+        let lenRows = rows.length
+        if(lenRows == 0){
+            connection.query(`
+            INSERT INTO mydb.Computador (idComputador,tipoGPU,tipoCPU,GBRAM,Computador.SolicitudMantenimiento,Aula_Código)
+            VALUES (${idComputador},'${tipoCPU}','${tipoGPU}',${GBRAM},'{}',${aula_Codigo});`
+            ,(err, rows) => {
+                if(err) throw err;
+          
+               
+            });
+
+        }else if(lenRows == 1){
+            connection.query(`
+            UPDATE Computador
+            SET tipoGPU = '${tipoCPU}', tipoCPU = '${tipoGPU}',GBRAM = ${GBRAM},Aula_Código = ${aula_Codigo}
+            WHERE idComputador = ${idComputador};
+            `
+            ,(err, rows) => {
+                if(err) throw err;
+         
+               
+            });
+        }
+
+     
+    });
+
+}
+
+function addAula(codigo,cupoMaximo,idAsistenteTecnico){
+
+    connection.query(`
+    select Código
+    from Aula
+    where Código = ${codigo};   `
+    ,(err, rows) => {
+        if(err) return err;
+        let lenRows = rows.length
+        if(lenRows == 0){
+
+            connection.query(`
+            INSERT INTO mydb.aula (Código,CupoMaximo,idAsistenteTecnico)
+            VALUES (${codigo},${cupoMaximo},${idAsistenteTecnico});
+`
+            ,(err, rows) => {
+                if(err) return err;
+            });
+
+        }else if(lenRows == 1){
+            connection.query(`
+            UPDATE Aula
+            SET CupoMaximo = ${cupoMaximo},idAsistenteTecnico = ${idAsistenteTecnico}
+            WHERE Código = ${codigo};
+            `
+            ,(err, rows) => {
+                if(err) return err;
+           
+            });
+        }
+
+        
+    });
+
+}
+
+function addAsistenteTecnico(id,nombre,correo,celular){
+
+
+    connection.query(`
+    select mydb.\`Asistente Tecnico\`.\`idAsistente Tecnico\`
+    from mydb.\`Asistente Tecnico\`
+    where mydb.\`Asistente Tecnico\`.\`idAsistente Tecnico\` = ${id};`
+    ,(err, rows) => {
+        if(err) return err;
+        let lenRows = rows.length
+        if(lenRows == 0){
+
+            connection.query(`
+            INSERT INTO mydb.\`Asistente Tecnico\` (mydb.\`Asistente Tecnico\`.\`idAsistente Tecnico\`,Nombre,correo,celular)
+            VALUES (${id},'${nombre}','${correo}',${celular});`
+            ,(err, rows) => {
+                if(err) return err;
+                console.log(rows);
+               
+            });
+
+        }else if(lenRows == 1){
+
+            connection.query(`
+            UPDATE mydb.\`Asistente Tecnico\`
+            SET Nombre = '${nombre}', correo = '${correo}',celular = ${celular}
+            WHERE mydb.\`Asistente Tecnico\`.\`idAsistente Tecnico\`= ${id};`
+            ,(err, rows) => {
+                if(err) return err;
+                console.log(rows);
+            });
+        
+
+        }
+    });
+
+
+}
+
 
 module.exports = {
     logIn,
@@ -279,6 +401,8 @@ module.exports = {
     getComputadoresInAula,
     hacerSolicitudDeMantenimiento,
     getNumeroAulasgetAsistenteTecnico,
-    buscarTecnicoPorAula
-    
+    buscarTecnicoPorAula,
+    addComputador,
+    addAula,
+    addAsistenteTecnico
 }

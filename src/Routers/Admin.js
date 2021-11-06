@@ -1,31 +1,47 @@
 const express = require('express')
-
 const router = express.Router()
-
+const dbFuncs = require('../db/db')
 
 router.get('/admin', (req, res) => {
     res.render('admin')
 })
-// router.post('/generarAula', (req, res) => {
 
-// })
-
-router.post('/crearComputador', (req, res) => {
+router.post('/crearComputador', async (req, res) => {
     const info = req.body;
+    
+    try {
+        await dbFuncs.addComputador(info.id,info.GPU,info.CPU,info.RAM,info.aula)
+        res.status(200)
+    } catch (error) {
+        console.log(error)
+    }
 
     res.send(info)
 
-    //query para crear computador
 })
-router.post('/crearAula', (req, res) => {
+router.post('/crearAula', async(req, res) => {
     const info = req.body;
+    try {
+        await dbFuncs.addAula(info.aula,info.cupoMaximo,info.idAsistente)
+        res.status(200)
+    } catch (error) {
+        console.log(error)
+    }
     res.send(info)
-    //query para crear computador
+
 })
-router.post('/crearAsistenteTecnico', (req, res) => {
+router.post('/crearAsistenteTecnico', async(req, res) => {
     const info = req.body;
+    
+    try {
+        await dbFuncs.addAsistenteTecnico(info.idAsistente,info.nombre,info.correo,info.celular)
+        res.status(200)
+    } catch (error) {
+        console.log(error)
+        res.status(404)
+    }
+
     res.send(info)
-    //query para crear computador
 })
 
 module.exports = router
