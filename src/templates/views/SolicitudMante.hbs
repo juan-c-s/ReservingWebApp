@@ -13,25 +13,7 @@
 <body>
 
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
-    <a class="navbar-brand" href="#">Eafit 💻</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="#">reservar camputadora</a>
-        <a class="nav-item nav-link" href="#">soporte</a>
-        <a class="nav-item nav-link active" href="#">solicitar mantenimiento</a>
-      </div>
-    </div>
-    <div>
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="#">@tomascc</a>
-      </div>
-    </div>
-  </nav>
+  {{>navigation}}
 
 
   <div class="containe mt-5">
@@ -41,7 +23,7 @@
 
         <div class="row">
           <div class="col-12">
-            <h1>buscar asistente tecnico</h1>
+            <h1>solitud de mantenimiento</h1>
           </div>
         </div>
 
@@ -52,10 +34,12 @@
               <div class="form-group">
                 <label for="exampleFormControlSelect1">selecionar aula</label>
                 <select class="form-control" id="seleccionarAula">
-                  <option></option>
+                  {{#each aulas}}
+                  <option>{{this}}</option>
+                  {{/each}}
                 </select>
               </div>
-              <button type="submit" class="btn btn-secondary mb-2">seleccionar</button>
+              <button type="submit" class="btn btn-secondary mb-2" id="seleccionar">seleccionar</button>
 
               <div class="form-group">
                 <label for="exampleFormControlSelect1">seleccionar computadora</label>

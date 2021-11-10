@@ -289,7 +289,7 @@ function addComputador(idComputador,tipoGPU,tipoCPU,GBRAM,aula_Codigo){
         if(lenRows == 0){
             connection.query(`
             INSERT INTO mydb.Computador (idComputador,tipoGPU,tipoCPU,GBRAM,Computador.SolicitudMantenimiento,Aula_Código)
-            VALUES (${idComputador},'${tipoCPU}','${tipoGPU}',${GBRAM},'{}',${aula_Codigo});`
+            VALUES (${idComputador},'${tipoCPU}','${tipoGPU}',${GBRAM},'{"Solicitudes":[]}',${aula_Codigo});`
             ,(err, rows) => {
                 if(err) throw err;
           
