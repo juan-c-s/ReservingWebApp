@@ -1,11 +1,22 @@
 const express = require('express')
 const router = express.Router()
-const dbFuncs = require('../db/db')
+
+
+const Aula = require('../db/mongo/models/Aula')
 
 router.get('/buscarTecnico', async (req, res) => {
 
     try {
-        await dbFuncs.getNumeroAulasgetAsistenteTecnico(res)
+        const aulas = await Aula.find({});
+        const codigos = []
+        aulas.forEach(aulas => {
+            codigos.push(aulas.codigo)
+        });
+
+        res.render('buscarTecnico',{
+            aulas : codigos
+        })
+        
     } catch (e) {
         console.log(res)
     }
@@ -13,9 +24,19 @@ router.get('/buscarTecnico', async (req, res) => {
 })
 
 router.post('/getAsistente',async (req,res)=>{
-    const aula = req.body.aula
+    const info = req.body
+    console.log(info)
     try {
-        await dbFuncs.buscarTecnicoPorAula(aula,res)
+        const aula = await Aula.findOne({
+            codigo : info.aula
+        })
+
+        res.send({
+            Nombre : aula.asistente.nombre,
+            text : `cell : ${aula.asistente.celular} <br>
+            correo: ${aula.asistente.correo}`
+        })
+    
     } catch (e) {
         console.log(e)
     }

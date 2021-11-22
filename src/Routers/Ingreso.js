@@ -3,6 +3,8 @@ const router = express.Router()
 const dbFuncs = require('../db/db')
 
 
+const Usuario = require('../db/mongo/models/Usuario')
+
 
 router.get('/login', (req, res) => {
     res.render('Ingreso', {
@@ -13,17 +15,25 @@ router.get('/login', (req, res) => {
 
  router.post('/auth',async (req, res) => {
     const user = req.body
-    console.log(user)
     try{
-        let responce = await dbFuncs.logIn(user.username,user.password);
-        console.log(responces)
-    }catch{
-        console.log("Failed to find user")
+        const usuario = await Usuario.findOne({
+            email : user.username,
+            pasword : user.password
+        })
+        if(usuario.isAdmin){
+            res.send(true)
+        }else if(!usuario.isAdmin){
+            res.send(false)
+        }else{
+            res.send(null)
+        }
+        
+    }catch(e){
+        console.log(e)
+        res.status(404)
     }
     
-    
-    //<-------- autenticar usuario -------->
-    console.log('authenticating...')
+
 })
 
 

@@ -35,10 +35,14 @@ seleccionar.addEventListener('click', async (event) => {
     }
 })
 
+aula.addEventListener('change',async (event)=>{
+    event.preventDefault()
+    dropDownComputadores.innerHTML = '<option></option>'
+})
 
 dropDownComputadores.addEventListener('change',async (event)=>{
     event.preventDefault()
-    const SPECS = await postData('/getSPECS', { id: dropDownComputadores.value })
+    const SPECS = await postData('/getSPECS', { id: dropDownComputadores.value, aula : aula.value})
 
     const textSpecs = document.getElementById('specs')
     textSpecs.innerHTML = SPECS.text
@@ -47,12 +51,20 @@ dropDownComputadores.addEventListener('change',async (event)=>{
 
 reservar.addEventListener('click', async (event) => {
     event.preventDefault()
-    const info = await postData('/reservar', {
+
+    const info =  postData('/reservar', {
         id: dropDownComputadores.value,
         aula: aula.value,
         hora: hora.value
 
     })
+
+    const textSpecs = document.getElementById('specs')
+    dropDownComputadores.innerHTML = '<option></option>'
+    aula.value = '';
+    hora.value = '';
+    textSpecs.innerHTML = '';
+    subtitulo.innerHTML = '';
 
 })
 

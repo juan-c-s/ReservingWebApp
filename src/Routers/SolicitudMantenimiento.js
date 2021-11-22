@@ -1,7 +1,9 @@
 
 const express = require('express')
 const router = express.Router()
-const dbFuncs = require('../db/db')
+
+
+const Aula = require('../db/mongo/models/Aula')
 
 
 router.get('/getInfo', (req, res) => {
@@ -11,7 +13,17 @@ router.get('/getInfo', (req, res) => {
 router.get('/Solicitud',async (req, res) => {
 
     try {
-    await dbFuncs.getAulasNumbers(res)
+
+        const aulas = await Aula.find({});
+        const codigos = []
+        aulas.forEach(aulas => {
+        codigos.push(aulas.codigo)
+        })
+
+        res.render('SolicitudMante',{
+            aulas : codigos
+        })
+
     } catch(e){
         console.log(e)
     }
@@ -19,13 +31,26 @@ router.get('/Solicitud',async (req, res) => {
 })
 
 router.post('/solicitar', async (req, res) => {
-    const solicitud  = req.body
-    const usuario = 4456
-    // esto se borra ciando termines el auth
-
+    const info  = req.body
+    
     try {
-        await dbFuncs.hacerSolicitudDeMantenimiento(solicitud['idComputador'],usuario,solicitud['solicitud'])
-        console.log("solicitud creada")
+        const aula = await Aula.findOne({codigo : info.aula})
+
+        aula.computadoras.forEach((compu)=>{
+            if(compu.idComputador == info.idComputador){
+                compu.solicitudesMantenimiento.push({
+                    solitud : info.solicitud,
+                })
+            }
+        })
+
+        aula.save((d)=>{
+            res.status(404)
+        }).catch((err)=>{
+            res.status(200)
+            console.log(err)
+        })
+
     } catch (e) {
         console.log(e)
     }
@@ -33,11 +58,20 @@ router.post('/solicitar', async (req, res) => {
 })
 
 router.post('/getComputadores',async (req, res) => {
-    const aula = req.body.aula;
+    const info = req.body
 
     try {
-        await dbFuncs.getComputadoresInAula(aula,res)
+        const idCompus = []
+        const aula = await Aula.findOne({codigo : info.aula})
+
+        aula.computadoras.forEach(compu => {
+            idCompus.push(compu.idComputador)
+        });
+
+        res.send(idCompus)
+
     } catch (e) {
+        res.status(404)
         console.log(e)
     }
     
